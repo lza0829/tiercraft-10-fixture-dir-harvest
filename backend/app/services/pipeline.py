@@ -264,13 +264,19 @@ def list_reconcile(domain_id: int | None = None) -> list[dict]:
 
 
 def dashboard() -> dict:
+    # harvest 依赖本模块的主题域读取，这里延迟导入避免循环依赖。
+    from app.services.harvest import list_harvest_jobs
+
     domains = list_domains()
     counts = layer_counts()
     jobs = list_jobs()[:5]
     reports = list_reconcile()[:5]
+    harvest_jobs = list_harvest_jobs(limit=5)
+    watermark_total = _watermark_total()
     return {
         "主题域数": len(domains),
         "分层计数": counts,
+        "位点切片数": watermark_total,
         "最近任务": [
             {
                 "编号": j["id"],
@@ -280,6 +286,17 @@ def dashboard() -> dict:
                 "剔除": j["drop_count"],
             }
             for j in jobs
+        ],
+        "最近采集": [
+            {
+                "编号": j["id"],
+                "状态": j["status"],
+                "成功切片": len(j["success_files"]),
+                "失败切片": len(j["failed_files"]),
+                "新增行数": j["new_count"],
+                "说明": j["message"],
+            }
+            for j in harvest_jobs
         ],
         "最近对账": [
             {
@@ -292,3 +309,13 @@ def dashboard() -> dict:
         ],
         "主题域": [{"编号": d["id"], "名称": d["name"], "业务键": d["biz_key"]} for d in domains],
     }
+
+
+def _watermark_total() -> int:
+    conn = connect()
+    try:
+        return int(
+            conn.execute("SELECT COUNT(*) AS c FROM harvest_watermarks").fetchone()["c"]
+        )
+    finally:
+        conn.close()

@@ -10,6 +10,7 @@
       <nav class="topnav">
         <router-link to="/">总览</router-link>
         <router-link to="/domains">主题域</router-link>
+        <router-link to="/harvest">采集位点</router-link>
         <router-link to="/paste">贴源层</router-link>
         <router-link to="/detail">明细层</router-link>
         <router-link to="/summary">汇总层</router-link>

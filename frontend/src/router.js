@@ -1,6 +1,7 @@
 import { createRouter, createWebHistory } from 'vue-router'
 import Dashboard from './pages/Dashboard.vue'
 import Domains from './pages/Domains.vue'
+import Harvest from './pages/Harvest.vue'
 import LayerPaste from './pages/LayerPaste.vue'
 import LayerDetail from './pages/LayerDetail.vue'
 import LayerSummary from './pages/LayerSummary.vue'
@@ -12,6 +13,7 @@ export default createRouter({
   routes: [
     { path: '/', component: Dashboard },
     { path: '/domains', component: Domains },
+    { path: '/harvest', component: Harvest },
     { path: '/paste', component: LayerPaste },
     { path: '/detail', component: LayerDetail },
     { path: '/summary', component: LayerSummary },

@@ -29,6 +29,7 @@ body {
 }
 
 a { color: inherit; text-decoration: none; }
+a.link { color: var(--accent); border-bottom: 1px solid currentColor; }
 
 .shell {
   min-height: 100vh;
